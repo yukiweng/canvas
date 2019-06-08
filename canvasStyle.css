@@ -1,0 +1,30 @@
+body{
+	margin:0;
+	font-size: 0;
+
+}
+html{
+
+}
+button{
+	border:0;
+	padding: 0;
+}
+#canvas{
+	background: grey;
+	display: block;
+}
+.actions{
+	position: fixed;
+	bottom: 8px;
+	left: 8px;
+}
+.actions > #pen{
+	display: none;
+}
+.actions.x > #pen{
+	display: inline-block;
+}
+.actions.x > #eraser{
+	display: none
+}

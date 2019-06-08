@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>myCanvas</title>
+	<link rel="stylesheet" type="text/css" href="./canvasStyle.css">
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<div id="actions" class="actions">
+<button id="eraser">橡皮擦</button>
+<button id="pen">画笔</button>
+</div>
+<script>
+var canvas=document.getElementById('canvas')
+var context=canvas.getContext('2d')//获取绘画2d上下文
+
+setCanvas(canvas);
+
+listenToUser(canvas);
+
+function listenToUser(canvas){
+	var using=false
+	var lastPoint={x:undefined,y:undefined}
+	
+	//特性检测
+	if(document.body.ontouchstart!==undefined){
+		//触屏设备
+		canvas.ontouchstart=function(a){
+		var x=a.touches[0].clientX
+		var y=a.touches[0].clientY
+		using=true
+		if(eraserEnabled){
+			context.clearRect(x-5,y-5,10,10)
+		}else{
+			lastPoint={x:x,y:y}	
+		}
+	}
+
+		canvas.ontouchmove=function(b){
+		var x=b.touches[0].clientX
+		var y=b.touches[0].clientY
+		if(!using){return}//如果using为false，则return，停止
+		//此处省去了else
+		// using为true，则执行下列代码
+		if(eraserEnabled){
+			context.clearRect(x-5,y-5,10,10)
+		}else{
+			newPoint={x:x,y:y}
+			drawLine(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y)
+			lastPoint=newPoint // 重点！要重新赋值！			
+		}
+		}
+
+		canvas.ontouchend=function(c){
+			using=false
+		}
+
+	}else{
+		//非触屏设备
+		canvas.onmousedown=function(a){
+			var x=a.clientX
+			var y=a.clientY
+			using=true
+			if(eraserEnabled){
+				context.clearRect(x-5,y-5,10,10)
+			}else{
+				lastPoint={x:x,y:y}	
+			}
+		}
+		canvas.onmousemove=function(b){
+		var x=b.clientX
+		var y=b.clientY
+		if(!using){return}//如果using为false，则return，停止
+		//此处省去了else
+		// using为true，则执行下列代码
+		if(eraserEnabled){
+			context.clearRect(x-5,y-5,10,10)
+		}else{
+			newPoint={x:x,y:y}
+			drawLine(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y)
+			lastPoint=newPoint // 重点！要重新赋值！			
+		}
+		}
+		canvas.onmouseup=function(c){
+			using=false
+		}
+	}
+	
+	//橡皮擦
+	var eraserEnabled=false
+	eraser.onclick=function(){
+		eraserEnabled=true
+		actions.className="actions x"
+	}
+ 	pen.onclick=function(){
+ 		eraserEnabled=false
+ 		actions.className="actions"
+ 	}
+
+}
+
+
+
+//工具函数
+
+//画线
+function drawLine(x1,y1,x2,y2){
+	context.beginPath();
+	context.moveTo(x1,y1);
+	context.strokeStyle="pink";
+	context.lineWidth=3;
+	context.lineTo(x2,y2);
+	context.stroke();
+	context.closePath();
+}
+
+// 生成canvas
+function setCanvas(canvas){
+	widthAndHeight()
+
+	window.onresize=function(){
+		widthAndHeight()
+		//监听用户是否调整页面大小，使画布铺满页面
+	}
+
+	function widthAndHeight(){
+		var pageWidth=document.documentElement.clientWidth
+		var pageHeight=document.documentElement.clientHeight
+		canvas.width=pageWidth
+		canvas.height=pageHeight	
+	}
+
+}
+
+
+
+</script>
+
+</body>
+</html>
