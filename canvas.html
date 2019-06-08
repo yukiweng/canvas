@@ -5,14 +5,29 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>myCanvas</title>
 	<link rel="stylesheet" type="text/css" href="./canvasStyle.css">
+	<script src="//at.alicdn.com/t/font_1232968_1bn2tlhsf1y.js"></script>
+
 </head>
 <body>
-
 <canvas id="canvas"></canvas>
+
 <div id="actions" class="actions">
-<button id="eraser">橡皮擦</button>
-<button id="pen">画笔</button>
+<svg id="pen" class="icon active">
+    <use xlink:href="#icon-pencil"></use>
+</svg>
+<svg id="eraser" class="icon">
+    <use xlink:href="#icon-eraser1"></use>
+</svg>
 </div>
+
+<ul class="colors">
+<li id="red" class="red"></li>
+<li id="yellow" class="yellow"></li>
+<li id="green" class="green"></li>
+<li id="blue" class="blue"></li>
+<li id="grey" class="grey"></li>
+
+</ul>
 <script>
 var canvas=document.getElementById('canvas')
 var context=canvas.getContext('2d')//获取绘画2d上下文
@@ -93,15 +108,35 @@ function listenToUser(canvas){
 	var eraserEnabled=false
 	eraser.onclick=function(){
 		eraserEnabled=true
-		actions.className="actions x"
+		eraser.classList.add('active')
+ 		pen.classList.remove('active')
+
+
 	}
  	pen.onclick=function(){
  		eraserEnabled=false
- 		actions.className="actions"
+ 		pen.classList.add('active')
+ 		eraser.classList.remove('active')
  	}
 
-}
+ 	red.onclick=function(){
+ 		context.strokeStyle='#FF7777'
+ 	}
+ 	yellow.onclick=function(){
+ 		context.strokeStyle='#FFFF88'
+ 	}
+ 	green.onclick=function(){
+ 		context.strokeStyle='#99FFAD'
+ 	}
+ 	blue.onclick=function(){
+ 		context.strokeStyle='#77C9FF'
+ 	}
+ 	grey.onclick=function(){
+ 		context.strokeStyle='#888888'
+ 	}
 
+
+}
 
 
 //工具函数
@@ -110,7 +145,6 @@ function listenToUser(canvas){
 function drawLine(x1,y1,x2,y2){
 	context.beginPath();
 	context.moveTo(x1,y1);
-	context.strokeStyle="pink";
 	context.lineWidth=3;
 	context.lineTo(x2,y2);
 	context.stroke();
