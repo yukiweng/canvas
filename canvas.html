@@ -5,11 +5,11 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>myCanvas</title>
 	<link rel="stylesheet" type="text/css" href="./canvasStyle.css">
-	<script src="//at.alicdn.com/t/font_1232968_1bn2tlhsf1y.js"></script>
+	<script src="//at.alicdn.com/t/font_1232968_lhb2m36b61l.js"></script>
 
 </head>
 <body>
-<canvas disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" id="canvas"></canvas>
+<canvas id="canvas"></canvas>
 
 <div id="actions" class="actions">
 <svg id="pen" class="icon active">
@@ -18,6 +18,12 @@
 <svg id="eraser" class="icon">
     <use xlink:href="#icon-eraser1"></use>
 </svg>
+<svg id="clear" class="icon">
+    <use xlink:href="#icon-clear"></use>
+</svg>
+<svg id="download" class="icon">
+    <use xlink:href="#icon-save"></use>
+</svg>
 </div>
 
 <ul class="colors">
@@ -25,13 +31,17 @@
 <li id="yellow" class="yellow"></li>
 <li id="green" class="green"></li>
 <li id="blue" class="blue"></li>
-<li id="grey" class="grey"></li>
-
+<li id="black" class="black"></li>
+</ul>
+<ul class="sizes">
+<li id="thin" class="thin"></li>
+<li id="thick" class="thick"></li>
 </ul>
 <script>
+
 var canvas=document.getElementById('canvas')
 var context=canvas.getContext('2d')//获取绘画2d上下文
-
+var lineWidth=5
 setCanvas(canvas);
 
 listenToUser(canvas);
@@ -96,7 +106,7 @@ function listenToUser(canvas){
 		}else{
 			newPoint={x:x,y:y}
 			drawLine(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y)
-			lastPoint=newPoint // 重点！要重新赋值！			
+			lastPoint=newPoint // 重点！要重新赋值！	
 		}
 		}
 		canvas.onmouseup=function(c){
@@ -118,6 +128,20 @@ function listenToUser(canvas){
  		pen.classList.add('active')
  		eraser.classList.remove('active')
  	}
+ 	clear.onclick=function(){
+ 		context.clearRect(0,0,canvas.width,canvas.height)
+ 		// 清除，清除面积和canvas大小一样
+ 	}
+ 	download.onclick=function(){
+ 		var url=canvas.toDataURL("image/png")//将数据存储为图片形式
+ 		var a=document.createElement('a')
+ 		document.body.appendChild(a)
+ 		a.href=url
+ 		a.download="my picture"
+ 		a.target="_blank"
+ 		a.click()
+ 	}
+}
 
  	red.onclick=function(){
  		context.strokeStyle='#FF7777'
@@ -131,13 +155,18 @@ function listenToUser(canvas){
  	blue.onclick=function(){
  		context.strokeStyle='#77C9FF'
  	}
- 	grey.onclick=function(){
- 		context.strokeStyle='#888888'
+ 	black.onclick=function(){
+ 		context.strokeStyle='black'
  	}
 
 
-}
-
+ 
+ 	thin.onclick=function(){
+ 		context.lineWidth=3
+ 	}
+ 	thick.onclick=function(){
+ 		context.lineWidth=5
+ 	}
 
 //工具函数
 
@@ -145,7 +174,6 @@ function listenToUser(canvas){
 function drawLine(x1,y1,x2,y2){
 	context.beginPath();
 	context.moveTo(x1,y1);
-	context.lineWidth=3;
 	context.lineTo(x2,y2);
 	context.stroke();
 	context.closePath();

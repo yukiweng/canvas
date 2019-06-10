@@ -38,7 +38,13 @@ button{
 	transform: scale(1.2); /* 放大1.2倍*/
 
 }
+.actions svg#download{
+	position: fixed;
+	top:10px;
+	right: 16px;
+	margin:0;
 
+}
 
 .colors{
 	position: fixed;
@@ -65,6 +71,24 @@ button{
 .colors li.blue{
 	background: #77C9FF
 }
-.colors li.grey{
-	background: #888888
+.colors li.black{
+	background: black
+}
+.sizes{
+	position: fixed;
+	top:40px;
+	right: 16px;
+}
+.sizes li{
+	margin:20px 0;
+}
+.sizes .thin{
+	width:25px;
+	height: 2px;
+	border-top:3px solid black;
+}
+.sizes .thick{
+	width:25px;
+	height: 2px;
+	border-top:6px solid black;
 }
